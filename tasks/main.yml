@@ -1,0 +1,29 @@
+---
+- name: Create nginx-proxy config directory
+  file: state=directory path=/www/proxy/
+  register: create_nginx_proxy_directory
+
+- name: Add custom nginx config for nginx-proxy
+  copy: src=custom.conf dest=/www/proxy/
+  register: add_custom_nginx_config
+  when: create_nginx_proxy_directory | success
+
+- name: Create a network for containers
+  docker_network:
+    name: "{{ proxy_network_name }}"
+
+- name: Run nginx-proxy container for docker containers
+  docker_container:
+    name: "{{ proxy_container_name }}"
+    image: "{{ proxy_image_name | default('jwilder/nginx-proxy') }}"
+    state: started
+    restart: yes
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /www/proxy/custom.conf:/etc/nginx/conf.d/custom.conf:ro
+    networks:
+      - name: "{{ proxy_network_name }}"
+    ports:
+      - "{{ proxy_entry_port }}:80"
+  when: add_custom_nginx_config | success

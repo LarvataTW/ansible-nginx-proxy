@@ -1,0 +1,21 @@
+---
+dependencies:
+  - pip
+  - docker
+
+galaxy_info:
+  author: zx1986
+  description: "Nginx-Proxy auto proxy for docker containers."
+  company: "Larvata"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.0
+  platforms:
+    - name: Ubuntu
+      versions:
+      - Xenial
+  galaxy_tags:
+    - docker
+    - proxy
+    - nginx
+    - http
+    - https

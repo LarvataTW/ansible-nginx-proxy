@@ -1,0 +1,5 @@
+---
+proxy_container_name: proxy
+proxy_image_name: jwilder/nginx-proxy
+proxy_entry_port: 8080
+proxy_network_name: proxy_network
